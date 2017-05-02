@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Rent;
+use App\Member;
+use App\Card;
+use Carbon\Carbon;
+use Auth;
+
+
+class RentController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function show(){
+        $rents = Rent::where('paid', 0)->get();
+        $now = Carbon::now();
+        return view('rent.show')->withRents($rents)->withNow($now);
+    }
+
+
+    public function checkIn(Request $request){
+    	$card = Card::where('idNumber', $request->idNumber)->first();
+    	
+    	$user = Auth::user();
+        $member = Member::find($request->member_id);
+
+        //New Rent
+        $rent = new Rent;
+        $rent->member_id = $request->member_id;
+        $rent->card_id = $card->id;
+     	$rent->checkIn = Carbon::now();
+        $rent->paid=0;
+        $rent->totalMin=0;
+        $rent->total=0;
+
+        $rent->save();
+        $rents = Rent::where('member_id',$request->member_id)->where('paid', 1)->get();
+    	return redirect()->route('members.show', $request->member_id);
+    	
+    }
+
+    public function checkOut(Request $request){
+    	$card = Card::where('idNumber', $request->idNumber)->first();
+    	$rent = Rent::where('card_id', $card->id)->where('paid',0)->first();
+
+
+    	$checkIn = Carbon::instance($rent->checkIn);
+    	$checkOut = Carbon::now();
+
+    	//calculate price to pay
+    	$usedMin = $checkIn->diffInMinutes($checkOut);
+    	$roundUp = 0;
+    	$section = floor($usedMin/15);
+    	if($usedMin%15>0) {
+    		$roundUp = 1;
+    	}
+    	$total = ($section*$card->type->price)+($roundUp*$card->type->price);
+
+    	$rent->paid = 1;
+    	$rent->totalMin = $usedMin;
+    	$rent->total = $total;
+    	$rent->checkOut = $checkOut;
+
+    	$rent->save();
+        $rent = null;
+
+    	
+
+
+    	// $user = Auth::user();
+        //    $member = Member::find($request->member_id);
+        //    $rents = Rent::where('member_id',$request->member_id)->where('paid', 1)->get();
+        
+    	return redirect()->route('members.show', $request->member_id);
+    	
+    }
+}

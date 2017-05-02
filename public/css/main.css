@@ -1,0 +1,19 @@
+.row{
+	background-color: white;
+}
+
+.tab{
+	margin-left: 100px;
+}
+
+.btn-h1-spacing{
+	margin-top: 18px;
+}
+
+.btn-space{
+	margin: 5px 5px 5px 0px;
+}
+body {
+
+	font-family: 'Open Sans', sans-serif;
+}

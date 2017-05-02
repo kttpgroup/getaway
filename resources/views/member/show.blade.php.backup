@@ -1,0 +1,96 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <h2>Member</h2>
+        </div>
+        <div class="col-md-2">
+          <a href="{{ route('members.edit', $member->id) }}" class="btn btn-lg btn-block btn-primary btn-h1-spacing" style="margin-top:20px;">แก้ไข</a>
+      </div>
+      <div class="col-md-12">
+          <hr>
+      </div>
+      <div class="col-md-12">
+
+        <table style="width:100%;">
+            <tr>
+                <td><label for="idCard">บัตรประชาชน:</label> <span>&nbsp;{{ $member->idCard }}</span></td>
+                <td><label for="suspend" class="tab">สถานะ:</label> <span>&nbsp;{{ ($member->suspend) ? 'ถูกระงับ':'ปกติ' }}</td>
+            </tr>
+            <tr>
+                <td><label for="name">ชื่อ:</label> <span>&nbsp;{{ $member->name }}</span></td>
+                <td><label for="tel" class="tab">เบอร์โทรศัพท์:</label> <span>&nbsp;{{ $member->tel }}</span></td> 
+            </tr>
+            <tr>
+                <td><label for="birth">วันเกิด:</label> <span>&nbsp;{{ $member->birth }}</span></td>
+                <td><label for="point" class="tab">แต้ม:</label> <span>&nbsp;{{ $member->point }}</span></td> 
+            </tr>
+        </table>
+
+    </div>
+    <div class="col-md-12">
+      <hr>
+  </div>
+  <div class="row">
+  <div class="col-md-6">
+        <h3>ประวัติการใช้งาน</h3>
+        <table class="table">
+          <thead>
+            <th>วันที่</th>
+            <th>เวลา</th>
+            <th>นาที</th>
+            <th>ราคา</th>
+          </thead>
+          @foreach($rents as $rental)
+          
+          <tr>
+            <td>{{ $rental->checkIn->toDateString() }}</td>
+            <td>{{ $rental->checkIn->toTimeString() }}-{{ $rental->checkOut->toTimeString() }}</td>
+            <td>{{ $rental->totalMin }}</td>
+            <td>{{ $rental->total }}</td>
+          </tr>
+          @endforeach
+        </table>
+
+    </div>
+    <div class="col-md-6">
+        <h3>การเข้าใช้</h3>
+        <div>
+            {!! Form::open(array('route' => 'rent.checkIn', 'data-parsley-validate' => '')) !!}
+                <button type="submit" class="btn btn-warning btn-space" {{ ($rent) ? 'disabled="disabled"' : '' }}>Card</button>
+                @if($rent!=null)
+                  {{ $rent->card->name }}
+                @else
+                <input type="text" name="idNumber" placeholder="รหัสบัตร">
+                @endif
+                <input type="hidden" name="member_id" value="{{$member->id}}">
+            {!! Form::close() !!}
+        </div>
+        <div>
+           <button type="button" class="btn btn-success btn-space disabled">Start</button> 
+           @if($rent!=null)
+            {{ $rent->checkIn->toTimeString() }}
+           @endif
+        </div>
+        <div>
+            {!! Form::open(array('route' => 'rent.checkOut', 'data-parsley-validate' => '')) !!}
+           <button type="submit" class="btn btn-danger btn-space" {{ ($rent) ? '' : 'disabled="disabled"'}}>Check Out</button> 
+           @if($rent!=null)
+           <input type="text" name="idNumber" placeholder="รหัสบัตร">
+           @endif
+           <input type="hidden" name="member_id" value="{{$member->id}}">
+           {!! Form::close() !!}
+        </div>
+
+        
+        
+
+    </div>
+
+</div>
+</div>
+
+</div>
+@endsection
