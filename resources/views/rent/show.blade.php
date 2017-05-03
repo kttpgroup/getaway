@@ -32,7 +32,7 @@
             <td><span class="tick"> {{ $rent->checkIn->diffInSeconds($now) }} </span></td>
             <td> <span class="price"> {{ $rent->card->type->price }} </span> </td>
             <td><a href="{{ route('members.show', $rent->member->id) }}" class="btn btn-default btn-sm btn-danger">Check Out</a></td>
-            
+            <input class="type_id" type="hidden" value="{{ $rent->card->type_id }}">
           </tr>
 
            
@@ -102,8 +102,10 @@
   var y = jQuery.noConflict();
   var numClass = y('.tick').length;
   var priceClass = y('.price').length;
+  var typeClass = y('.type_id').length;
   var arr = new Array(numClass);
   var prices = new Array(priceClass);
+  var types = new Array(typeClass);
   y(document).ready(setInterval(timeUpdate, 1000));
   function timeUpdate(){
     var days = 24*60*60,
@@ -138,6 +140,10 @@
       arr[index]=temp;
     });
 
+    j('.type_id').each(function (index){
+      types[index] = j(this).val();
+    });
+
     j('.price').each(function (index){
       if(typeof prices[index] == 'undefined'){
         price = j(this).html();
@@ -156,8 +162,12 @@
       if(min%15>0) {
         roundUp = 1;
       }
-      total = ((section*price)+(roundUp*price))/4;
-
+      //promotion price for 5 hours check
+      if(min>300 && types[index]==1){
+        total = 200;
+      }else{
+        total = ((section*price)+(roundUp*price))/4;
+      }
       j(this).html(total);
     });
   }

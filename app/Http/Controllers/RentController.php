@@ -79,11 +79,17 @@ class RentController extends Controller
     	if($usedMin%15>0) {
     		$roundUp = 1;
     	}
-    	$total = ($section*$card->type->price)+($roundUp*$card->type->price);
+        if($usedMin>=300 && $card->type_id==1){
+            $total = 200;
+        }
+        else {
+            $total = (($section*$card->type->price)+($roundUp*$card->type->price))/4;
+        }
+    	
 
     	$rent->paid = 1;
     	$rent->totalMin = $usedMin;
-    	$rent->total = $total/4;
+    	$rent->total = $total;
     	$rent->checkOut = $checkOut;
     	$rent->save();
 
@@ -133,7 +139,13 @@ Start Edit by Bee
             } 
         }
         
-        $total = (($section*$card->type->price)+($roundUp*$card->type-> price))/4;
+        //check if more than 5 hours and card type =1
+        if($usedMin>=300 && $card->type_id==1){
+            $total = 200;
+        }
+        else {
+            $total = (($section*$card->type->price)+($roundUp*$card->type->price))/4;
+        }
 
         $validateCard = 1;
         if($rent == null){
