@@ -159,7 +159,7 @@
       var roundUp = 0;
       var total = 0;
       var section = Math.floor(min/15);
-      if(min%15>0) {
+      if(min%15>0 && min%15>=5) {
         roundUp = 1;
       }
       //promotion price for 5 hours check
@@ -167,6 +167,10 @@
         total = 200;
       }else{
         total = ((section*price)+(roundUp*price))/4;
+      }
+
+      if(min < 5){
+        total = 0;
       }
       j(this).html(total);
     });

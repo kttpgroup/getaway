@@ -76,7 +76,7 @@ class RentController extends Controller
     	$usedMin = $checkIn->diffInMinutes($checkOut);
     	$roundUp = 0;
     	$section = floor($usedMin/15);
-    	if($usedMin%15>0) {
+    	if($usedMin%15>0 && $usedMin%15>=5) {
     		$roundUp = 1;
     	}
         if($usedMin>=300 && $card->type_id==1){
@@ -84,6 +84,10 @@ class RentController extends Controller
         }
         else {
             $total = (($section*$card->type->price)+($roundUp*$card->type->price))/4;
+        }
+
+        if($usedMin < 5){
+            $total = 0;
         }
     	
 
@@ -134,7 +138,7 @@ Start Edit by Bee
             $usedMin = $checkIn->diffInMinutes($checkOut);
             
             $section = floor($usedMin/15);
-            if($usedMin%15>0) {
+            if($usedMin%15>0 && $usedMin%15>=5) {
                 $roundUp = 1;
             } 
         }
@@ -145,6 +149,10 @@ Start Edit by Bee
         }
         else {
             $total = (($section*$card->type->price)+($roundUp*$card->type->price))/4;
+        }
+
+        if($usedMin < 5){
+            $total = 0;
         }
 
         $validateCard = 1;
