@@ -164,7 +164,7 @@
       }
       //promotion price for 5 hours check
       if(min>300 && types[index]==1){
-        total = 200;
+        total = 5*price;
       }else{
         total = ((section*price)+(roundUp*price))/4;
       }

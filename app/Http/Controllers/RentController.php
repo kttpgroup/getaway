@@ -80,7 +80,7 @@ class RentController extends Controller
     		$roundUp = 1;
     	}
         if($usedMin>=300 && $card->type_id==1){
-            $total = 200;
+            $total = 5*$card->type->price;
         }
         else {
             $total = (($section*$card->type->price)+($roundUp*$card->type->price))/4;
@@ -145,7 +145,7 @@ Start Edit by Bee
         
         //check if more than 5 hours and card type =1
         if($usedMin>=300 && $card->type_id==1){
-            $total = 200;
+            $total = 5*$card->type->price;
         }
         else {
             $total = (($section*$card->type->price)+($roundUp*$card->type->price))/4;
