@@ -27,4 +27,9 @@ class Rent extends Model
 	{
 	    return $this->belongsTo('App\Collect');
 	}
+
+	 public function reserves()
+    {
+        return $this->hasMany('App\Reserve');
+    }
 }

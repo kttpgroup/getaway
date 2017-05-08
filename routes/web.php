@@ -25,6 +25,8 @@ Route::resource('cards', 'CardController');
 
 Route::resource('types', 'TypeController');
 
+Route::resource('reserves', 'ReserveController');
+
 
 //Rental
 Route::post('checkIn', ['as'=>'rent.checkIn', 'uses' => 'RentController@checkIn']);

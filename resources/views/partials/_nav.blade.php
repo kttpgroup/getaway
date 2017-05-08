@@ -23,6 +23,7 @@
                         <li><a href="/members">Member</a></li>
                         <li><a href="/cards">Card</a></li>
                         <li><a href="/types">Type</a></li>
+                        <li><a href="/reserves">Reserve</a></li>
                         <li><a href="/report">Report</a></li>
                     </ul>
                     <form class="navbar-form navbar-left" action="{{ route("search")}}" method="GET">
